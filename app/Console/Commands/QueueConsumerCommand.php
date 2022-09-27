@@ -16,12 +16,12 @@ use stdClass;
 
 class QueueConsumerCommand extends Command
 {
-    private const MESSAGE_TYPE_SMS = 'sms';
-    private const MESSAGE_TYPE_EMAIL = 'email';
-
+    protected $description = 'this is rabbit mq consumer that is consuming notifications...';
     protected $signature = 'queue:consume';
 
-    protected $description = 'This command consumes the rabbitmq';
+    private const EMAIL_SUBJECT = 'email';
+    private const SMS_SUBJECT = 'sms';
+
 
     public function __construct(private ConsumeInterface $queueManager)
     {
@@ -30,8 +30,6 @@ class QueueConsumerCommand extends Command
 
     public function handle(): void
     {
-        $this->info('consuming...');
-
         $this->queueManager->consume('notifications', '', function (string $messageBody) {
             $this->publish(json_decode($messageBody));
         });
@@ -43,24 +41,29 @@ class QueueConsumerCommand extends Command
      */
     private function publish(stdClass $message): void
     {
+
         $type = $message->type;
-        $notifiable = new Notification(
+        $notif = new Notification(
             $message->to,
             $message->name,
             $message->message,
             $message->key
         );
+
+        // default
+        $methodType = new PublishEmail();
+        $methodBuilder = new NotificationBuilder($notif->getTo(), $notif->$this->getName(), $notif->getMessage());
         switch ($type) {
-            case self::MESSAGE_TYPE_EMAIL:
-                (new NotificationDirector())->build(new PublishEmail(), new NotificationBuilder($notifiable->getTo(), $notifiable->$this->getName(), $notifiable->getMessage()));
+            case self::EMAIL_SUBJECT:
                 break;
-            case self::MESSAGE_TYPE_SMS:
-                (new NotificationDirector())->build(new PublishSms(), new NotificationBuilder($notifiable->getTo(), $notifiable->$this->getName(), $notifiable->getMessage()));
+            case self::SMS_SUBJECT:
+                $methodType = new PublishSms();
                 break;
-            case 2:
+            default:
                 throw new InvalidArgumentException();
-                break;
         }
+
+        (new NotificationDirector())->build($methodType, $methodBuilder);
 
     }
 }
