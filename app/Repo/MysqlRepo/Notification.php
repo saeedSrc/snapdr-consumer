@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Repo\MysqlRepo;
+
 use App\Repo\NotificationInterface;
 use Illuminate\Support\Facades\DB;
 use PDO;

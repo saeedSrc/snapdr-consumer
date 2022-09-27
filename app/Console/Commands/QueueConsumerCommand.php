@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 use App\Builder\NotificationBuilder;
 use App\Builder\NotificationDirector;
 use App\Domain\Notification;
+use App\Events\MessagePublished;
 use App\Services\Consume\ConsumeInterface;
 use App\Services\Publish\PublishEmail;
 use App\Services\Publish\PublishSms;
@@ -64,6 +65,8 @@ class QueueConsumerCommand extends Command
         }
 
         (new NotificationDirector())->build($methodType, $methodBuilder);
+
+        event(MessagePublished::broadcast());
 
     }
 }

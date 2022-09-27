@@ -4,5 +4,5 @@ namespace App\Repo;
 
 interface NotificationInterface
 {
-    public function UpdateToSuccessReceived(string $messageKey): void;
+    public function UpdateToSuccessReceived(string $key): void;
 }

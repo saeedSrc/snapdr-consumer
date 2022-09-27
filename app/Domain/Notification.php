@@ -8,7 +8,7 @@ class Notification
         private string $to,
         private string $name,
         private string $message,
-        private string $messageKey
+        private string $key
     ) {
     }
 
@@ -22,9 +22,9 @@ class Notification
         return $this->message;
     }
 
-    public function getMessageKey(): string
+    public function getKey(): string
     {
-        return $this->messageKey;
+        return $this->key;
     }
 
     public function getName(): string
