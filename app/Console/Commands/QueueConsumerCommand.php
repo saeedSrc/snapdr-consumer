@@ -8,8 +8,8 @@ use App\Builder\NotificationDirector;
 use App\Domain\Notification;
 use App\Events\MessagePublished;
 use App\Services\Consume\ConsumeInterface;
-use App\Services\Publish\PublishEmail;
-use App\Services\Publish\PublishSms;
+use App\Services\Publish\SendEmailService;
+use App\Services\Publish\SendSmsService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use InvalidArgumentException;
@@ -52,13 +52,13 @@ class QueueConsumerCommand extends Command
         );
 
         // default
-        $methodType = new PublishEmail();
+        $methodType = new SendEmailService();
         $methodBuilder = new NotificationBuilder($notif->getTo(), $notif->$this->getName(), $notif->getMessage());
         switch ($type) {
             case self::EMAIL_SUBJECT:
                 break;
             case self::SMS_SUBJECT:
-                $methodType = new PublishSms();
+                $methodType = new SendSmsService();
                 break;
             default:
                 throw new InvalidArgumentException();

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repo\MysqlRepo\Notification;
+use App\Repo\NotificationInterface;
+use App\Services\Consume\ConsumeInterface;
+use App\Services\Consume\RabbitConsumer;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(ConsumeInterface::class, RabbitConsumer::class);
+        $this->app->bind(NotificationInterface::class, Notification::class);
     }
 
     /**

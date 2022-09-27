@@ -6,7 +6,7 @@ use App\Builder\NotificationBuilderInterface;
 use GuzzleHttp\Client;
 use Throwable;
 
-class PublishSms implements NotificationBuilderInterface
+class SendSmsService implements NotificationBuilderInterface
 {
     public function push(string $to, string $name, string $message): void
     {
