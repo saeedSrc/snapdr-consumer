@@ -19,11 +19,11 @@ class RabbitConsumer implements ConsumeInterface
      */
     public function __construct()
     {
-        $this->connection = AMQPStreamConnection::create_connection($this->getRabbitmqConnection());
+        $this->connection = AMQPStreamConnection::create_connection($this->getConn());
         $this->channel = $this->connection->channel();
     }
 
-    private function getRabbitmqConnection(): array
+    private function getConn(): array
     {
         return [
             [

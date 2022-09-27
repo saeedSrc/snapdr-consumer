@@ -51,9 +51,10 @@ class QueueConsumerCommand extends Command
             $message->key
         );
 
+
         // default
         $methodType = new SendEmailService();
-        $methodBuilder = new NotificationBuilder($notif->getTo(), $notif->$this->getName(), $notif->getMessage());
+        $methodBuilder = new NotificationBuilder($notif->getTo(), $notif->getName(), $notif->getMessage());
         switch ($type) {
             case self::EMAIL_SUBJECT:
                 break;
@@ -66,7 +67,7 @@ class QueueConsumerCommand extends Command
 
         (new NotificationDirector())->build($methodType, $methodBuilder);
 
-        event(MessagePublished::broadcast());
+        event(MessagePublished::broadcast($notif));
 
     }
 }
