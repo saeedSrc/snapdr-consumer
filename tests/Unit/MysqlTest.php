@@ -19,7 +19,7 @@ class MysqlTest extends TestCase
     /**
      * @group unit
      */
-    public function testUpdateByMessageKeyAndSetAsSentShouldWork(): void
+    public function testUpdateKeyAndReceivedShouldWork(): void
     {
         //arrange
         $to = 'foo';
@@ -29,7 +29,7 @@ class MysqlTest extends TestCase
         $sent = 0;
         $key = 'buzz';
         $dateTime = Carbon::now();
-        $this->insertDummyNotificationIntoDatabase(
+        $this->insertDummyData(
             $to,
             $name,
             $message,
@@ -56,7 +56,7 @@ class MysqlTest extends TestCase
         return $result->fetch(PDO::FETCH_ASSOC);
     }
 
-    private function insertDummyNotificationIntoDatabase(
+    private function insertDummyData(
         string $to,
         string $name,
         string $message,
